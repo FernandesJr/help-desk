@@ -1,13 +1,13 @@
-package domain.enums;
+package com.gilfer.helpdesk.domain.enums;
 
-public enum Perfil {
+public enum Prioridade {
 
-    ADMIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), TECNICO(2, "ROLE_TECNICO");
+    BAIXA(0, "ROLE_BAIXA"), MEDIA(1, "ROLE_MEDIA"), ALTA(2, "ROLE_ALTA");
 
     private Integer codigo;
     private String descricao;
 
-    Perfil(Integer codigo, String descricao) {
+    Prioridade(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -20,16 +20,16 @@ public enum Perfil {
         return descricao;
     }
 
-    public static Perfil toPerfil(Integer codigo){
+    public static Prioridade toPerfil(Integer codigo){
         if(codigo == null){
             return null;
         }
-        for (Perfil p : Perfil.values()){
+        for (Prioridade p : Prioridade.values()){
             if (p.getCodigo().equals(codigo)){
                 return p;
             }
         }
 
-        throw new IllegalArgumentException("Perfil inválido");
+        throw new IllegalArgumentException("Descrição inválida");
     }
 }

@@ -1,7 +1,7 @@
-package domain;
+package com.gilfer.helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import domain.enums.Perfil;
+import com.gilfer.helpdesk.domain.enums.Perfil;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -43,7 +43,7 @@ public abstract class Pessoa {
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
-        this.addPerfil(Perfil.CLIENTE); //Por padrão todos os usuários também são clientes
+        //this.addPerfil(Perfil.CLIENTE); //Por padrão todos os usuários também são clientes
     }
 
     public Long getId() {

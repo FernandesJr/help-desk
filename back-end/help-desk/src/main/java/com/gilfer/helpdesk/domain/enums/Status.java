@@ -1,13 +1,13 @@
-package domain.enums;
+package com.gilfer.helpdesk.domain.enums;
 
-public enum Prioridade {
+public enum Status {
 
-    BAIXA(0, "ROLE_BAIXA"), MEDIA(1, "ROLE_MEDIA"), ALTA(2, "ROLE_ALTA");
+    ABERTO(0, "ROLE_ABERTO"), ANDAMENTO(1, "ROLE_ANDAMENTO"), ENCERRADO(2, "ROLE_ENCERRADO");
 
     private Integer codigo;
     private String descricao;
 
-    Prioridade(Integer codigo, String descricao) {
+    Status(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -20,16 +20,16 @@ public enum Prioridade {
         return descricao;
     }
 
-    public static Prioridade toPerfil(Integer codigo){
+    public static Status toPerfil(Integer codigo){
         if(codigo == null){
             return null;
         }
-        for (Prioridade p : Prioridade.values()){
+        for (Status p : Status.values()){
             if (p.getCodigo().equals(codigo)){
                 return p;
             }
         }
 
-        throw new IllegalArgumentException("Descrição inválida");
+        throw new IllegalArgumentException("Status inválido");
     }
 }

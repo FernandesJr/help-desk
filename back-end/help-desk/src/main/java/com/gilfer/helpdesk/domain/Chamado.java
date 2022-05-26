@@ -1,14 +1,15 @@
-package domain;
+package com.gilfer.helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import domain.enums.Prioridade;
-import domain.enums.Status;
+import com.gilfer.helpdesk.domain.enums.Prioridade;
+import com.gilfer.helpdesk.domain.enums.Status;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@Table
 public class Chamado {
 
     @Id
@@ -36,12 +37,9 @@ public class Chamado {
 
     public Chamado(){}
 
-    public Chamado(Long id, LocalDateTime dataAbertura, LocalDateTime dataFechamento,
-                   Prioridade prioridade, Status status, String titulo, String observacoes,
+    public Chamado(Long id, Prioridade prioridade, Status status, String titulo, String observacoes,
                    Cliente cliente, Tecnico tecnico) {
         this.id = id;
-        this.dataAbertura = dataAbertura;
-        this.dataFechamento = dataFechamento;
         this.prioridade = prioridade;
         this.status = status;
         this.titulo = titulo;

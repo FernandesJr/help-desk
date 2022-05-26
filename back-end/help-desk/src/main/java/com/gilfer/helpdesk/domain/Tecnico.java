@@ -1,4 +1,4 @@
-package domain;
+package com.gilfer.helpdesk.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;

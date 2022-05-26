@@ -1,13 +1,13 @@
-package domain.enums;
+package com.gilfer.helpdesk.domain.enums;
 
-public enum Status {
+public enum Perfil {
 
-    ABERTO(0, "ROLE_ABERTO"), ANDAMENTO(1, "ROLE_ANDAMENTO"), ENCERRADO(2, "ROLE_ENCERRADO");
+    ADMIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), TECNICO(2, "ROLE_TECNICO");
 
     private Integer codigo;
     private String descricao;
 
-    Status(Integer codigo, String descricao) {
+    Perfil(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }
@@ -20,16 +20,16 @@ public enum Status {
         return descricao;
     }
 
-    public static Status toPerfil(Integer codigo){
+    public static Perfil toPerfil(Integer codigo){
         if(codigo == null){
             return null;
         }
-        for (Status p : Status.values()){
+        for (Perfil p : Perfil.values()){
             if (p.getCodigo().equals(codigo)){
                 return p;
             }
         }
 
-        throw new IllegalArgumentException("Status inválido");
+        throw new IllegalArgumentException("Perfil inválido");
     }
 }
