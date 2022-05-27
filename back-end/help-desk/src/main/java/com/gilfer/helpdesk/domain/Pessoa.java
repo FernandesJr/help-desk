@@ -43,7 +43,7 @@ public abstract class Pessoa {
         this.cpf = cpf;
         this.email = email;
         this.senha = senha;
-        //this.addPerfil(Perfil.CLIENTE); //Por padrão todos os usuários também são clientes
+        this.addPerfil(Perfil.CLIENTE); //Por padrão todos os usuários também são clientes
     }
 
     public Long getId() {

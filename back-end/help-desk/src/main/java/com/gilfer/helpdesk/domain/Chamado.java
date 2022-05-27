@@ -38,7 +38,7 @@ public class Chamado {
     public Chamado(){}
 
     public Chamado(Long id, Prioridade prioridade, Status status, String titulo, String observacoes,
-                   Cliente cliente, Tecnico tecnico) {
+                   Tecnico tecnico, Cliente cliente) {
         this.id = id;
         this.prioridade = prioridade;
         this.status = status;
