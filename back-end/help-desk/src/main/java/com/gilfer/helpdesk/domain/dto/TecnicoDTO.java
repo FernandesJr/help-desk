@@ -5,6 +5,8 @@ import com.gilfer.helpdesk.domain.Tecnico;
 import com.gilfer.helpdesk.domain.enums.Perfil;
 
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,11 +16,21 @@ import java.util.stream.Collectors;
 public class TecnicoDTO implements Serializable {
 
     private Long id;
+
+    @NotBlank(message = "campo NOME é requerido")
     private String nome;
+
+    @NotBlank(message = "campo CPF é requerido")
     private String cpf;
+
+    @NotBlank(message = "campo EMAIL é requerido")
     private String email;
+
+    @NotBlank(message = "campo SENHA é requerido")
     private String senha;
+
     private Set<Integer> perfis = new HashSet<>();
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
