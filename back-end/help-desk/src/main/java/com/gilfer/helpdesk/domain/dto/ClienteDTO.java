@@ -1,20 +1,18 @@
 package com.gilfer.helpdesk.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gilfer.helpdesk.domain.Tecnico;
+import com.gilfer.helpdesk.domain.Cliente;
 import com.gilfer.helpdesk.domain.enums.Perfil;
 import org.hibernate.validator.constraints.br.CPF;
 
-
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TecnicoDTO implements Serializable {
+public class ClienteDTO implements Serializable {
 
     private Long id;
 
@@ -36,9 +34,9 @@ public class TecnicoDTO implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
-    public TecnicoDTO(){}
+    public ClienteDTO(){}
 
-    public TecnicoDTO(Long id, String nome, String cpf, String email, String senha, Set<Integer> perfis, LocalDateTime dataCriacao) {
+    public ClienteDTO(Long id, String nome, String cpf, String email, String senha, Set<Integer> perfis, LocalDateTime dataCriacao) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -48,7 +46,7 @@ public class TecnicoDTO implements Serializable {
         this.dataCriacao = dataCriacao;
     }
 
-    public TecnicoDTO(Tecnico entity) {
+    public ClienteDTO(Cliente entity) {
         this.id = entity.getId();
         this.nome = entity.getNome();
         this.cpf = entity.getCpf();
