@@ -20,7 +20,7 @@ public enum Prioridade {
         return descricao;
     }
 
-    public static Prioridade toPerfil(Integer codigo){
+    public static Prioridade toEnum(Integer codigo){
         if(codigo == null){
             return null;
         }
