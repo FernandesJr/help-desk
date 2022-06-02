@@ -3,6 +3,7 @@ package com.gilfer.helpdesk.services;
 import com.gilfer.helpdesk.domain.Pessoa;
 import com.gilfer.helpdesk.domain.Tecnico;
 import com.gilfer.helpdesk.domain.dto.TecnicoDTO;
+import com.gilfer.helpdesk.domain.enums.Perfil;
 import com.gilfer.helpdesk.repositories.PessoaRepository;
 import com.gilfer.helpdesk.repositories.TecnicoRepository;
 import com.gilfer.helpdesk.services.exceptions.DataIntegrityViolationException;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,13 +40,32 @@ public class TecnicoService {
 
     @Transactional
     public TecnicoDTO create(TecnicoDTO dto){
-        this.ValidarCpfAndEmail(dto);
+        this.validarCpfAndEmail(dto);
         Tecnico entity = new Tecnico(dto);
         entity = repository.save(entity);
         return new TecnicoDTO(entity);
     }
 
-    public void ValidarCpfAndEmail(TecnicoDTO dto){
+    @Transactional
+    public TecnicoDTO update(Long id, TecnicoDTO dto){
+        dto.setId(id);
+        try{
+            Tecnico entity = repository.getReferenceById(id); //Validação de ID
+            this.validarCpfAndEmail(dto);
+            entity.setCpf(dto.getCpf());
+            entity.setEmail(dto.getEmail());
+            entity.setNome(dto.getNome());
+            entity.setSenha(dto.getSenha());
+            for(Perfil p : dto.getPerfis()){
+                entity.addPerfil(p);
+            }
+            return new TecnicoDTO(entity);
+        } catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Entidade não encontrada");
+        }
+    }
+
+    public void validarCpfAndEmail(TecnicoDTO dto){
         Optional<Pessoa> entity = pessoaRepository.findByCpf(dto.getCpf());
         if(entity.isPresent() && entity.get().getCpf() != dto.getCpf()){
             throw new DataIntegrityViolationException("CPF já cadastrado");

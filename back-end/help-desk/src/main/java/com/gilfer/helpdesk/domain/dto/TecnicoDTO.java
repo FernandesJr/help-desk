@@ -109,7 +109,11 @@ public class TecnicoDTO implements Serializable {
         return perfis.stream().map(c -> Perfil.toPerfil(c)).collect(Collectors.toSet());
     }
 
-    public void setPerfis(Perfil perfil) {
+    public void setPerfis(Set<Integer> perfis) {
+        this.perfis = perfis;
+    }
+
+    public void addPerfis(Perfil perfil) {
         this.perfis.add(perfil.getCodigo());
     }
 }
