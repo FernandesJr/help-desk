@@ -9,6 +9,7 @@ import com.gilfer.helpdesk.repositories.TecnicoRepository;
 import com.gilfer.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.gilfer.helpdesk.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +63,16 @@ public class TecnicoService {
             return new TecnicoDTO(entity);
         } catch (EntityNotFoundException e){
             throw new ResourceNotFoundException("Entidade não encontrada");
+        }
+    }
+
+    public void delete(Long id){
+        try{
+            repository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException("Entidade não encontrada");
+        }catch (org.springframework.dao.DataIntegrityViolationException d){
+            throw new DataIntegrityViolationException("O tecnico possui chamados atrelado a ele");
         }
     }
 
