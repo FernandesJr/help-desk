@@ -10,6 +10,7 @@ import com.gilfer.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.gilfer.helpdesk.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,9 @@ public class TecnicoService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Transactional(readOnly = true)
     public TecnicoDTO findById(Long id){
         Tecnico entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entidade não encontrada"));
@@ -43,6 +47,10 @@ public class TecnicoService {
     public TecnicoDTO create(TecnicoDTO dto){
         this.validarCpfAndEmail(dto);
         Tecnico entity = new Tecnico(dto);
+        for (Perfil p: dto.getPerfis()) {
+            entity.addPerfil(p);
+        }
+        entity.setSenha(passwordEncoder.encode(dto.getSenha()));
         entity = repository.save(entity);
         return new TecnicoDTO(entity);
     }
@@ -56,7 +64,9 @@ public class TecnicoService {
             entity.setCpf(dto.getCpf());
             entity.setEmail(dto.getEmail());
             entity.setNome(dto.getNome());
-            entity.setSenha(dto.getSenha());
+            if(!entity.getSenha().equals(dto.getSenha())){
+                entity.setSenha(passwordEncoder.encode(dto.getSenha()));
+            }
             for(Perfil p : dto.getPerfis()){
                 entity.addPerfil(p);
             }
@@ -78,11 +88,11 @@ public class TecnicoService {
 
     public void validarCpfAndEmail(TecnicoDTO dto){
         Optional<Pessoa> entity = pessoaRepository.findByCpf(dto.getCpf());
-        if(entity.isPresent() && entity.get().getCpf() != dto.getCpf()){
+        if(entity.isPresent() && entity.get().getId() != dto.getId()){
             throw new DataIntegrityViolationException("CPF já cadastrado");
         }
         entity = pessoaRepository.findByEmail(dto.getEmail());
-        if(entity.isPresent() && entity.get().getEmail() != dto.getEmail()){
+        if(entity.isPresent() && entity.get().getId() != dto.getId()){
             throw new DataIntegrityViolationException("Email já cadastrado");
         }
     }
