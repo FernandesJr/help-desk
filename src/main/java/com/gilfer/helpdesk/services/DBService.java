@@ -38,6 +38,7 @@ public class DBService {
         Tecnico tecnico1 = new Tecnico(null, "Fernandes", "52545854584",
                 "fernandes@email.com", passwordEncoder.encode("123"));
         tecnico1.addPerfil(Perfil.TECNICO);
+        tecnico1.addPerfil(Perfil.ADMIN);
 
         Cliente cliente1 = new Cliente(null, "Teca", "145847447458",
                 "teca@email.com", passwordEncoder.encode("123"));

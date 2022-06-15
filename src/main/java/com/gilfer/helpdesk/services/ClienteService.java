@@ -10,6 +10,7 @@ import com.gilfer.helpdesk.services.exceptions.DataIntegrityViolationException;
 import com.gilfer.helpdesk.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class ClienteService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public ClienteDTO findById(Long id){
@@ -44,7 +48,10 @@ public class ClienteService {
         this.validarCpfAndEmail(dto);
         System.out.println(dto.getPerfis().toString());
         Cliente entity = new Cliente(dto);
-        System.out.println(entity.getPerfis().toString());
+        entity.setSenha(passwordEncoder.encode(dto.getSenha()));
+        for(Perfil p : dto.getPerfis()){
+            entity.addPerfil(p);
+        }
         entity = repository.save(entity);
         return new ClienteDTO(entity);
     }
@@ -58,7 +65,9 @@ public class ClienteService {
             entity.setCpf(dto.getCpf());
             entity.setEmail(dto.getEmail());
             entity.setNome(dto.getNome());
-            entity.setSenha(dto.getSenha());
+            if(!entity.getSenha().equals(dto.getSenha())){
+                entity.setSenha(passwordEncoder.encode(dto.getSenha()));
+            }
             for(Perfil p : dto.getPerfis()){
                 entity.addPerfil(p);
             }
@@ -74,17 +83,17 @@ public class ClienteService {
         }catch (EmptyResultDataAccessException e){
             throw new ResourceNotFoundException("Entidade não encontrada");
         }catch (org.springframework.dao.DataIntegrityViolationException d){
-            throw new DataIntegrityViolationException("O tecnico possui chamados atrelado a ele");
+            throw new DataIntegrityViolationException("O técnico possui chamados atrelado a ele");
         }
     }
 
     public void validarCpfAndEmail(ClienteDTO dto){
         Optional<Pessoa> entity = pessoaRepository.findByCpf(dto.getCpf());
-        if(entity.isPresent() && entity.get().getCpf() != dto.getCpf()){
+        if(entity.isPresent() && entity.get().getId() != dto.getId()){
             throw new DataIntegrityViolationException("CPF já cadastrado");
         }
         entity = pessoaRepository.findByEmail(dto.getEmail());
-        if(entity.isPresent() && entity.get().getEmail() != dto.getEmail()){
+        if(entity.isPresent() && entity.get().getId() != dto.getId()){
             throw new DataIntegrityViolationException("Email já cadastrado");
         }
     }
